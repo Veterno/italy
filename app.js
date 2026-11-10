@@ -403,21 +403,33 @@ themeButton.addEventListener('click',()=>{const dark=document.documentElement.da
 
 // Локальная галерея исходной презентации без подписей источников.
 const slideTitles=[
- 'Италия — географическая характеристика','Визитная карточка','ЭГП: Средиземноморье','ЭГП: транспорт и транзит',
- 'Рельеф','Климат','Водные и минеральные ресурсы','Природные ландшафты',
- 'Население','Размещение населения','Хозяйственные районы','Специализация',
- 'Сельское хозяйство и пищевая промышленность','Туризм','Главные выводы и вопросы'
+ 'Италия — географическая характеристика',
+ 'Сайт и QR-код',
+ 'Визитная карточка',
+ 'ЭГП: Средиземноморье',
+ 'ЭГП: транспорт и транзит',
+ 'Рельеф',
+ 'Климат и агроклиматические ресурсы',
+ 'Водные и минеральные ресурсы',
+ 'Природные ландшафты',
+ 'Население',
+ 'Размещение населения',
+ 'Хозяйственные районы',
+ 'Специализация',
+ 'Сельское хозяйство и пищевая промышленность',
+ 'Туризм',
+ 'Спасибо за внимание'
 ];
 let slideIndex=0;
 const slideImage=document.getElementById('slide-image');
 const thumbs=document.getElementById('slide-thumbnails');
 const player=document.getElementById('slide-player');
-const pathForSlide=i=>`slides/${String(i+1).padStart(2,'0')}.webp`;
+const pathForSlide=i=>`slides/${String(i+1).padStart(2,'0')}.webp?v=20261110-2`;
 function setSlide(i){
  slideIndex=Math.max(0,Math.min(slideTitles.length-1,i));
  slideImage.src=pathForSlide(slideIndex);
  slideImage.alt=`Слайд ${slideIndex+1} из ${slideTitles.length}: ${slideTitles[slideIndex]}`;
- document.getElementById('slide-counter').textContent=String(slideIndex+1).padStart(2,'0')+' / 15';
+ document.getElementById('slide-counter').textContent=String(slideIndex+1).padStart(2,'0')+' / '+slideTitles.length;
  document.getElementById('slide-subtitle').textContent=slideTitles[slideIndex];
  document.getElementById('slide-prev').disabled=slideIndex===0;
  document.getElementById('slide-next').disabled=slideIndex===slideTitles.length-1;
@@ -426,7 +438,7 @@ function setSlide(i){
 }
 for(let i=0;i<slideTitles.length;i++){
  const button=document.createElement('button');button.type='button';button.className='thumb';button.title=slideTitles[i];button.setAttribute('aria-label',`Показать слайд ${i+1}: ${slideTitles[i]}`);
- const im=document.createElement('img');im.src=`slides/${String(i+1).padStart(2,'0')}-mini.webp`;im.alt='';im.width=240;im.height=135;im.loading='lazy';
+ const im=document.createElement('img');im.src=`slides/${String(i+1).padStart(2,'0')}-mini.webp?v=20261110-2`;im.alt='';im.width=240;im.height=135;im.loading='lazy';
  const caption=document.createElement('small');caption.textContent=String(i+1).padStart(2,'0')+' · '+slideTitles[i];caption.style.cssText='overflow:hidden;text-overflow:ellipsis;white-space:nowrap';
  button.append(im,caption);button.addEventListener('click',()=>setSlide(i));thumbs.append(button);
 }
@@ -449,4 +461,4 @@ document.getElementById('slide-fullscreen').addEventListener('click',async()=>{
  try{if(document.fullscreenElement)await document.exitFullscreen();else if(player.requestFullscreen)await player.requestFullscreen();}catch(_){/* На некоторых мобильных браузерах полноэкранный режим недоступен. */}
 });
 // Загружаем ближайшие слайды после показа, сохраняя трафик на телефоне.
-slideImage.addEventListener('load',()=>{for(let i=slideIndex+1;i<=Math.min(14,slideIndex+2);i++){const img=new Image();img.src=pathForSlide(i);}});
+slideImage.addEventListener('load',()=>{for(let i=slideIndex+1;i<=Math.min(slideTitles.length-1,slideIndex+2);i++){const img=new Image();img.src=pathForSlide(i);}});
